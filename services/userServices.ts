@@ -11,7 +11,7 @@ export class UserService {
     }
 
     updateUser(id: number, edit: Partial<UsersInterface>){
-        this.userList = this.userList.map(row => row.ID === id ? {...row, ...edit} : row)
+        return this.userList = this.userList.map(row => row.ID === id ? {...row, ...edit} : row)
     }
 
     fetchAll(){
