@@ -1,10 +1,17 @@
-import express, {Request, Response} from 'express'
+import dotenv from 'dotenv';
+
+import express from 'express'
 import { userRouter } from './controllers/user';
+import { authRouter } from './controllers/authController';
+import { authenticateToken } from './midleware/midleware';
 
-const user = express();
+dotenv.config();
+const app = express();
+app.use(express.json());
 
-user.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', authenticateToken, userRouter);
 
-user.listen(3000, () =>{
+app.listen(3000, () =>{
     console.log('Server is running on port 3000');
 })
