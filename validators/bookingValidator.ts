@@ -2,34 +2,32 @@ import { BookingInterface } from "../interfaces/BookingInterface";
 
 export class BookingValidator {
     static validateBooking(booking: any, allBookig: BookingInterface[]): BookingInterface | Boolean | string {
-
+        const error: string[] = []
         const { first_name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status } = booking;
         if (!first_name) {
-            return 'Tienes que introducir tu nombre completo'
+           error.push('Tienes que introducir tu nombre completo')
         } else if (status !== 'checkIn' && status !== 'checkOut' && status !== 'In Progress') {
-            return 'status solo puede ser ACTIVE o INACTIVE'
+           error.push('status solo puede ser ACTIVE o INACTIVE')
         } else if (allBookig.some(bookingId => bookingId.ID === booking.ID)) {
-            return 'el id no puede estar duplicado'
-        } else if (last_Name === '') {
-            return 'tienes que poner una foto'
+           error.push('el id no puede estar duplicado')
+        } else if (!last_Name) {
+           error.push('tienes que introducir el apellido')
         } else if (!orderDate) {
-            return 'tienes que introducir una fecha'
+           error.push('tienes que introducir una fecha')
         } else if (!checkIn) {
-            return 'tienes que introducir una descripcion del trabajo'
+           error.push('tienes que introducir el chek in')
         } else if (!checkOut) {
-            return 'tienes que introducir un numero de contacto'
-        } else if (!checkOut) {
-            return 'tienes que introducir el checkOut'
+           error.push('tienes que introducir el check out')
         } else if (!specialRequest) {
-            return 'tienes que introducir el specialRequest'
+           error.push('tienes que introducir el specialRequest')
         } else if (roomType !== 'Double Superior' && roomType !== 'Double' && roomType !== 'luxyry' && roomType !== 'Single Bed') {
-            return 'La habitacion elegida no existe'
+           error.push('La habitacion elegida no existe')
         } else if (!roomNumber) {
-            return 'tienes que introducir el numero de la habitacion'
+           error.push('tienes que introducir el numero de la habitacion')
         } else if (!roomNumber) {
-            return 'tienes que introducir el numero de la habitacion'
+           error.push('tienes que introducir el numero de la habitacion')
         }
 
-        return booking;
+       return error.length === 0 ? true : booking;
     }
 }
