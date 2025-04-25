@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 import express from 'express'
-import { userRouter } from './controllers/user';
+import { userRouter } from './controllers/userController';
 import { authRouter } from './controllers/authController';
 import { authenticateToken } from './midleware/midleware';
 
