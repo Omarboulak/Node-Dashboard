@@ -1,18 +1,35 @@
-import { Router, Request, Response } from 'express';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { Request, Response, NextFunction } from "express";
+import AuthModel from "../models/authSchema";
 
 dotenv.config();
-const key = process.env.SECRET_KEY as string;
 
-export const authRouter = Router();
+const secretKey = process.env.SECRET_KEY as string;
 
-authRouter.post('/login', (req: Request, res: Response) => {
-  const { user, pass } = req.body;
-  if (user === 'admin' && pass === 'admin') {
-    const token = jwt.sign({ user }, key, { expiresIn: '8h' });
-    return res.json({ token });
-  } else {
-    return res.status(401).json({ message: 'Invalid credentials' });
-  }
-});
+export const AuthController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { email, password } = req.body;
+    try {
+        const foundUser = await AuthModel.findOne({ email });
+        if (!foundUser) {
+            res.status(401).json({ message: "User not found "});
+            return;
+        }
+        if (password != foundUser.password) {
+            res.status(401).json({ message: "Incorrect password"});
+            return;
+        }
+        const token = jwt.sign({ email: foundUser.email }, secretKey, {
+            expiresIn: "1h",
+        });
+        res.status(200).json({
+            token,
+            email: foundUser.email,
+            username: foundUser.username,
+        });
+    } 
+    catch (err) {
+        console.error("Error during login:", err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
