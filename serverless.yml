@@ -1,0 +1,30 @@
+service: miranda-backend
+
+frameworkVersion: '3'
+
+package:
+  patterns:
+    - '!./**'
+    - 'package.json'
+    - 'node_modules/**'
+    - 'dist/**'
+    - 'data/**'
+    - 'public/**'
+
+provider:
+  name: aws
+  region: eu-west-3
+  runtime: nodejs18.x
+
+functions:
+  app:
+    handler: dist/index.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true

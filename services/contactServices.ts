@@ -1,24 +1,28 @@
-import contacts from '../public/Contact.json' 
-import { ContactInterface } from '../interfaces/ContactInterface'
+import { ContactInterface } from '../interfaces/ContactInterface';
+import { ContactSchema } from '../models/ContactSchema';
 
 export class ContactService {
+  async createContact(contact: ContactInterface) {
+    const newContact = new ContactSchema(contact);
+    return await newContact.save();
+  }
 
-    private contactList : ContactInterface[] = contacts;
-    
-    createContact(contact: ContactInterface){
-        this.contactList.push(contact)
-        return contact;
-    }
+  async updateContact(id: number, edit: Partial<ContactInterface>) {
+    return await ContactSchema.findOneAndUpdate({ ID: id }, edit, {
+      new: true,
+      runValidators: true
+    });
+  }
 
-    updateContact(id: number, edit: Partial<ContactInterface>){
-        this.contactList = this.contactList.map(row => row.ID === id ? {...row, ...edit} : row)
-    }
+  async fetchAll() {
+    return await ContactSchema.find();
+  }
 
-    fetchAll(){
-        return this.contactList;
-    }
+  async deleteContact(id: number) {
+    return await ContactSchema.deleteOne({ ID: id });
+  }
 
-    deleteContact(id: number){
-        return this.contactList = this.contactList.filter(Contact => Contact.ID !== id)
-    }
+  async getContactById(id: number) {
+    return await ContactSchema.findOne({ ID: id });
+  }
 }

@@ -1,24 +1,28 @@
-import room from '../public/Rooms.json' 
-import { RoomInterface } from '../interfaces/RoomInterface'
+import { RoomInterface } from '../interfaces/RoomInterface';
+import { RoomSchema } from '../models/RoomSchema';
 
 export class RoomService {
+  async createRoom(room: RoomInterface) {
+    const newRoom = new RoomSchema(room);
+    return await newRoom.save();
+  }
 
-    private roomList : RoomInterface[] = room;
-    
-    createRoom(room: RoomInterface){
-        this.roomList.push(room)
-        return room;
-    }
+  async updateRoom(id: number, edit: Partial<RoomInterface>) {
+    return await RoomSchema.findOneAndUpdate({ room_id: id }, edit, {
+      new: true,
+      runValidators: true
+    });
+  }
 
-    updateRoom(id: number, edit: Partial<RoomInterface>){
-        this.roomList = this.roomList.map(row => row.room_id === id ? {...row, ...edit} : row)
-    }
+  async fetchAll() {
+    return await RoomSchema.find();
+  }
 
-    fetchAll(){
-        return this.roomList;
-    }
+  async deleteRoom(id: number) {
+    return await RoomSchema.deleteOne({ room_id: id });
+  }
 
-    deleteRoom(id: number){
-        return this.roomList = this.roomList.filter(room => room.room_id !== id)
-    }
+  async getRoomById(id: number) {
+    return await RoomSchema.findOne({ room_id: id });
+  }
 }

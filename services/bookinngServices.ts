@@ -1,24 +1,29 @@
-import bookings from '../public/Booking.json' 
-import { BookingInterface } from '../interfaces/BookingInterface'
+import { BookingInterface } from '../interfaces/BookingInterface';
+import { BookingSchema } from '../models/BookingSchema';
 
 export class BookingService {
+  async createBooking(booking: BookingInterface) {
+    const newBooking = new BookingSchema(booking);
+    return await newBooking.save();
+  }
 
-    private bookingList : BookingInterface[] = bookings;
-    
-    createBooking(booking: BookingInterface){
-        this.bookingList.push(booking)
-        return booking;
+  async updateBooking(id: number, edit: Partial<BookingInterface>) {
+    return await BookingSchema.findOneAndUpdate({ ID: id }, edit, {
+      new: true,
+      runValidators: true
     }
+    );
+  }
 
-    updateBooking(id: number, edit: Partial<BookingInterface>){
-        this.bookingList = this.bookingList.map(row => row.ID === id ? {...row, ...edit} : row)
-    }
+  async fetchAll() {
+    return await BookingSchema.find();
+  }
 
-    fetchAll(){
-        return this.bookingList;
-    }
+  async deleteBooking(id: number) {
+    return await BookingSchema.deleteOne({ ID: id });
+  }
 
-    deleteBooking(id: number){
-        return this.bookingList = this.bookingList.filter(Booking => Booking.ID !== id)
-    }
+  async getBookingById(id: number) {
+    return await BookingSchema.findOne({ ID: id });
+  }
 }

@@ -1,24 +1,29 @@
 import users from '../public/users.json' 
 import { UsersInterface } from '../interfaces/UsersInterface'
+import { UserSchema } from '../models/UserSchema';
 
 export class UserService {
-
-    private userList : UsersInterface[] = users;
-    
-    createUser(user: UsersInterface){
-        this.userList.push(user)
-        return user;
+    async createUser(user: UsersInterface) {
+        const newUser = new UserSchema(user);
+        return await newUser.save();
     }
 
-    updateUser(id: number, edit: Partial<UsersInterface>){
-        return this.userList = this.userList.map(row => row.ID === id ? {...row, ...edit} : row)
+    async updateUser(id: number, edit: Partial<UsersInterface>) {
+        return await UserSchema.findOneAndUpdate({ ID: id }, edit, {
+            new: true,
+            runValidators: true,
+        });
     }
 
-    fetchAll(){
-        return this.userList;
+    async fetchAll() {
+        return await UserSchema.find();
     }
 
-    deleteUser(id: number){
-        return this.userList = this.userList.filter(user => user.ID !== id)
+    async deleteUser(id: number) {
+        return await UserSchema.deleteOne({ ID: id });
+    }
+
+    async getUserById(id: number) {
+        return await UserSchema.findOne({ ID: id });
     }
 }

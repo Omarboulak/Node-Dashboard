@@ -3,8 +3,8 @@ import { BookingInterface } from "../interfaces/BookingInterface";
 export class BookingValidator {
     static validateBooking(booking: any, allBookig: BookingInterface[]): BookingInterface | Boolean | string {
         const error: string[] = []
-        const { first_name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status } = booking;
-        if (!first_name) {
+        const { first_Name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status } = booking;
+        if (!first_Name) {
            error.push('Tienes que introducir tu nombre completo')
         } else if (status !== 'checkIn' && status !== 'checkOut' && status !== 'In Progress') {
            error.push('status solo puede ser ACTIVE o INACTIVE')

@@ -1,5 +1,4 @@
 export interface UsersInterface {
-    ID: number,
     Photo: string,
     FullName: string,
     Email: string,
