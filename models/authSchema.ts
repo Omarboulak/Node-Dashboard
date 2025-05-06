@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { AuthInterface } from "../interfaces/AuthInterface";
 
 export const authSchema = new Schema<AuthInterface>({
