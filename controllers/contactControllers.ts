@@ -21,7 +21,7 @@ contactRouter.post('/', async (req: Request, res: Response) => {
         const allContacts = await contactService.fetchAll();
         
         const validation = ContactValidator.validateContact(newContactData, allContacts);
-        if (validation !== true) {
+        if (validation.length > 0) {
             return res.status(400).json({ error: validation });
         }
         
@@ -35,7 +35,7 @@ contactRouter.post('/', async (req: Request, res: Response) => {
 
 contactRouter.put('/:id', async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const updates = req.body as Partial<ContactInterface>;
         
         const existing = await contactService.getContactById(id);
@@ -53,7 +53,7 @@ contactRouter.put('/:id', async (req: Request, res: Response) => {
 
 contactRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const result = await contactService.deleteContact(id);
         
         if (result.deletedCount && result.deletedCount > 0) {
