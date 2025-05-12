@@ -1,16 +1,11 @@
-// src/models/BookingSchema.ts
 import { Schema, model, Document } from 'mongoose';
 import { BookingInterface } from '../interfaces/BookingInterface';
 
-export interface BookingDocument extends BookingInterface, Document {}
+export interface BookingDocument extends Omit<BookingInterface, 'id'>, Document { }
 
 const Booking = new Schema<BookingDocument>(
   {
-    ID: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+
     first_Name: {
       type: String,
       required: [true, 'El nombre es obligatorio'],
@@ -42,7 +37,7 @@ const Booking = new Schema<BookingDocument>(
       type: String,
       required: [true, 'El tipo de habitación es obligatorio'],
       enum: {
-        values: ['Double', 'Deluxe', 'Suite', 'Single'],
+        values: ['Double Superior', 'Deluxe', 'Suite', 'Single'],
         message: 'No es un tipo de habitación válido',
       },
     },
@@ -55,7 +50,7 @@ const Booking = new Schema<BookingDocument>(
       type: String,
       required: [true, 'El estado de la reserva es obligatorio'],
       enum: {
-        values: ['checkedIn', 'checkedOut', 'In Progress'],
+        values: ['checkIn', 'checkOut', 'In Progress'],
         message: 'no es un estado válido',
       },
     },
@@ -64,5 +59,15 @@ const Booking = new Schema<BookingDocument>(
     timestamps: true,
   }
 );
+
+Booking.set('toJSON', {
+  virtuals: true,      
+  versionKey: false,   
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString();
+    delete ret._id;
+  },
+});
+
 
 export const BookingSchema = model<BookingDocument>('Booking', Booking);

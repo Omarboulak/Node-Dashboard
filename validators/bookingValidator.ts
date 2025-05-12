@@ -7,10 +7,8 @@ export class BookingValidator {
         if (!first_Name) {
            error.push('Tienes que introducir tu nombre completo')
         } else if (status !== 'checkIn' && status !== 'checkOut' && status !== 'In Progress') {
-           error.push('status solo puede ser ACTIVE o INACTIVE')
-        } else if (allBookig.some(bookingId => bookingId.ID === booking.ID)) {
-           error.push('el id no puede estar duplicado')
-        } else if (!last_Name) {
+           error.push('status solo puede ser checkIn, checkOut, In Progress')
+        }  else if (!last_Name) {
            error.push('tienes que introducir el apellido')
         } else if (!orderDate) {
            error.push('tienes que introducir una fecha')
