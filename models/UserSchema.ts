@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import { UsersInterface } from '../interfaces/UsersInterface';
 
-export interface UserDocument extends UsersInterface, Document {}
+export interface UserDocument extends Omit<UsersInterface,'id'>, Document {}
 
 const User = new Schema<UserDocument>({
   Photo: {
@@ -43,6 +43,15 @@ const User = new Schema<UserDocument>({
   }
 }, {
   timestamps: true   
+});
+
+User.set('toJSON', {
+  virtuals:    true,
+  versionKey:  false,
+  transform: (_doc, ret) => {
+    ret.id = ret._id.toString();
+    delete ret._id;
+  },
 });
 
 export const UserSchema = model<UserDocument>('User', User);

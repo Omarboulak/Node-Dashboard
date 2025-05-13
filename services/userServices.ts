@@ -1,29 +1,28 @@
-import users from '../public/users.json' 
-import { UsersInterface } from '../interfaces/UsersInterface'
+import { UsersInterface } from '../interfaces/UsersInterface';
 import { UserSchema } from '../models/UserSchema';
 
 export class UserService {
-    async createUser(user: UsersInterface) {
-        const newUser = new UserSchema(user);
-        return await newUser.save();
-    }
+  async createUser(data: UsersInterface) {
+    return await new UserSchema(data).save();
+  }
 
-    async updateUser(id: number, edit: Partial<UsersInterface>) {
-        return await UserSchema.findOneAndUpdate({ ID: id }, edit, {
-            new: true,
-            runValidators: true,
-        });
-    }
+  async fetchAll() {
+    return await UserSchema.find();
+  }
 
-    async fetchAll() {
-        return await UserSchema.find();
-    }
+  async getUserById(id: string) {
+    return await UserSchema.findById(id);
+  }
 
-    async deleteUser(id: number) {
-        return await UserSchema.deleteOne({ ID: id });
-    }
+  async updateUser(id: string, updates: Partial<UsersInterface>) {
+    return await UserSchema.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
+  }
 
-    async getUserById(id: number) {
-        return await UserSchema.findOne({ ID: id });
-    }
+  async deleteUser(id: string) {
+    const doc = await UserSchema.findByIdAndDelete(id);
+    return { deletedCount: doc ? 1 : 0 };
+  }
 }

@@ -5,7 +5,6 @@ export interface BookingDocument extends Omit<BookingInterface, 'id'>, Document 
 
 const Booking = new Schema<BookingDocument>(
   {
-
     first_Name: {
       type: String,
       required: [true, 'El nombre es obligatorio'],
