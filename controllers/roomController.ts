@@ -21,7 +21,7 @@ roomRouter.post('/', async (req: Request, res: Response) => {
         const allRooms = await roomService.fetchAll();
         
         const validation = RoomValidator.validateRoom(newRoomData, allRooms);
-        if (validation !== true) {
+        if (validation.length > 0) {
             return res.status(400).json({ error: validation });
         }
         
@@ -52,16 +52,20 @@ roomRouter.put('/:id', async (req: Request, res: Response) => {
 });
 
 roomRouter.delete('/:id', async (req: Request, res: Response) => {
-    try {
-        const id = Number(req.params.id);
-        const result = await roomService.deleteRoom(id);
-        
-        if (result.deletedCount && result.deletedCount > 0) {
-            return res.status(204).send();
-        } else {
-            return res.status(404).json({ message: 'Room not found' });
-        }
-    } catch (err: any) {
-        return res.status(500).json({ error: err.message });
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid room ID' });
     }
+
+    const result = await roomService.deleteRoom(id);
+    
+    if (result > 0) { 
+      return res.status(204).send();
+    } else {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
 });

@@ -5,6 +5,7 @@ import { userRouter } from './controllers/userController';
 import { bookingRouter } from './controllers/bookingControler';
 import { AuthController } from './controllers/authController';
 import { contactRouter } from './controllers/contactControllers';
+import { roomRouter } from './controllers/roomController';
 import { authenticateToken } from './midleware/midleware';
 import connectDB from './seed/connection';
 import cors from 'cors';
@@ -22,6 +23,7 @@ app.use('/api/v1/auth', AuthController);
 app.use('/api/v1/users', authenticateToken, userRouter);
 app.use('/api/v1/booking', authenticateToken, bookingRouter);
 app.use('/api/v1/contact', authenticateToken, contactRouter);
+app.use('/api/v1/room', authenticateToken, roomRouter);
 
 // export const handler = () =>{
 //     connectDB().then(() =>{serverless(app)})

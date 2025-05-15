@@ -29,6 +29,7 @@ export const AuthController = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Contraseña inválida' });
     }
 
+    // 3) Generar el JWT
     const token = jwt.sign(
       { id: user.id, username: user.username },
       secretKey,
