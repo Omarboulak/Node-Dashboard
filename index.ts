@@ -8,9 +8,11 @@ import { contactRouter } from './controllers/contactControllers';
 import { authenticateToken } from './midleware/midleware';
 import connectDB from './seed/connection';
 import cors from 'cors';
+import {testConnection } from './seed/myqlConnection';
 
 dotenv.config();
-connectDB();
+// connectDB();
+testConnection();
 const app = express();
 app.use(express.json());
 app.use(cors())

@@ -5,7 +5,7 @@ export interface RoomDocument extends RoomInterface, Document {}
 
 const Room = new Schema<RoomDocument>(
   {
-    room_id: {
+    room_number: {
       type: Number,
       required: true,
       unique: true,

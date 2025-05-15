@@ -1,35 +1,49 @@
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { Request, Response } from "express";
-import AuthModel from "../models/authSchema";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
+import { mysqlConnection } from "../seed/myqlConnection";
 
 dotenv.config();
 const secretKey = process.env.SECRET_KEY as string;
 
 export const AuthController = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    if (email === 'admin' && password === 'admin') {
-      const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
-      return res.status(200).json({ token, email });
-    }
+    const [rows] = await mysqlConnection.execute(
+      `SELECT id, username, password
+         FROM users
+        WHERE username = ?`,
+      [username]
+    );
+    const users = rows as Array<{ id: number; username: string; password: string }>;
 
-    const user = await AuthModel.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email' });
+    if (users.length === 0) {
+      return res.status(401).json({ message: 'Usuario no encontrado' });
     }
+    const user = users[0];
 
     const passwordIsValid = await bcrypt.compare(password, user.password);
     if (!passwordIsValid) {
-      return res.status(401).json({ message: 'Invalid Password' });
+      return res.status(401).json({ message: 'Contraseña inválida' });
     }
 
-    const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
-    return res.status(200).json({ token, email });
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      secretKey,
+      { expiresIn: '1h' }
+    );
+
+    return res.status(200).json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username
+      }
+    });
   } catch (error: any) {
-    console.error("Error logging in:", error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Error en AuthController:", error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
   }
 };

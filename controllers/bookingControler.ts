@@ -35,7 +35,7 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
 
 bookingRouter.put('/:id', async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
+        const id = Number(req.params.id);
         const updates = req.body as Partial<BookingInterface>;
         
         const existing = await bookingService.getBookingById(id);
@@ -53,10 +53,10 @@ bookingRouter.put('/:id', async (req: Request, res: Response) => {
 
 bookingRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
+        const id = parseInt(req.params.id); 
         const result = await bookingService.deleteBooking(id);
         
-        if (result.deletedCount && result.deletedCount > 0) {
+        if (result.affectedRows > 0) {
             return res.status(204).send();
         } else {
             return res.status(404).json({ message: 'Booking not found' });
