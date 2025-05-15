@@ -59,12 +59,13 @@ export class RoomService {
 
 
   async deleteRoom(id: number) {
-    const result = await sequelize.query('DELETE FROM rooms WHERE room_number = ? RETURNING *', {
+    const [_, metadata] = await sequelize.query('DELETE FROM rooms WHERE room_number = ?', {
       replacements: [id],
     });
 
-    return result[0].length;
+    return (metadata as { affectedRows: number }).affectedRows;
   }
+
 
   async getRoomById(room_number: number): Promise<RoomInterface | null> {
     const sql = `SELECT * FROM rooms WHERE room_number = :room_number`;

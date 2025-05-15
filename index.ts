@@ -23,7 +23,7 @@ app.use('/api/v1/auth', AuthController);
 app.use('/api/v1/users', authenticateToken, userRouter);
 app.use('/api/v1/booking', authenticateToken, bookingRouter);
 app.use('/api/v1/contact', authenticateToken, contactRouter);
-app.use('/api/v1/room', authenticateToken, roomRouter);
+app.use('/api/v1/room', roomRouter);
 
 // export const handler = () =>{
 //     connectDB().then(() =>{serverless(app)})
