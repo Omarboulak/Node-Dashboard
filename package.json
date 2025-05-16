@@ -8,7 +8,8 @@
         "build": "tsc",
         "deploy": "sls deploy",
         "seed": "ts-node seed/seedUsers.ts",
-        "seed:users": "ts-node seed/seedLogin.ts"
+        "seed:users": "ts-node seed/seedLogin.ts",
+        "seed:sql": "ts-node seed/seedSQL.ts"
     },
     "dependencies": {
         "bcrypt": "^5.1.1",

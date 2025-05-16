@@ -34,11 +34,7 @@ export class RoomService {
       sets.push(`${key} = :val${idx}`);
       replacements[`val${idx}`] = val;
     });
-    const sql = `
-      UPDATE rooms
-         SET ${sets.join(', ')}
-       WHERE room_number = :room_number
-    `;
+    const sql = `UPDATE rooms SET ${sets.join(', ')} WHERE room_number = :room_number`;
     const [_, metadata] = await sequelize.query(sql, {
       replacements,
       type: QueryTypes.UPDATE,

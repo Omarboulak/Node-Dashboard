@@ -1,62 +1,75 @@
-import { mysqlConnection } from '../seed/myqlConnection';
+import { QueryTypes } from 'sequelize';
+import { sequelize } from '../models/sequalize';
 import { BookingInterface } from '../interfaces/BookingInterface';
 
 export class BookingService {
   async createBooking(booking: BookingInterface) {
-    const [result] = await mysqlConnection.execute(
-      `INSERT INTO bookings 
-      (first_Name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        booking.first_Name,
-        booking.last_Name,
-        booking.orderDate,
-        booking.checkIn,
-        booking.checkOut,
-        booking.specialRequest,
-        booking.roomType,
-        booking.roomNumber,
-        booking.status
-      ]
-    );
-    
-    const insertResult = result as any;
-    return { id: insertResult.insertId, ...booking };
+    const sql = `
+      INSERT INTO bookings 
+        (first_Name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status)
+      VALUES
+        (:first_Name, :last_Name, :orderDate, :checkIn, :checkOut, :specialRequest, :roomType, :roomNumber, :status)
+    `;
+    await sequelize.query(sql, {
+      replacements: {
+        first_Name: booking.first_Name,
+        last_Name: booking.last_Name,
+        orderDate: booking.orderDate,
+        checkIn: booking.checkIn,
+        checkOut: booking.checkOut,
+        specialRequest: booking.specialRequest,
+        roomType: booking.roomType,
+        roomNumber: booking.roomNumber,
+        status: booking.status,
+      },
+      type: QueryTypes.INSERT,
+    });
+    return booking;
   }
 
   async updateBooking(id: number, edit: Partial<BookingInterface>) {
-    const fields = Object.keys(edit)
-      .map(key => `${key} = ?`)
-      .join(', ');
-
-    const values = [...Object.values(edit), id];
-
-    const [result] = await mysqlConnection.execute(
-      `UPDATE bookings SET ${fields} WHERE id = ?`,
-      values
-    );
-
-    const updateResult = result as any;
-    if (updateResult.affectedRows === 0) {
+    const sets: string[] = [];
+    const replacements: any = { id };
+    Object.entries(edit).forEach(([key, val], idx) => {
+      sets.push(`${key} = :val${idx}`);
+      replacements[`val${idx}`] = val;
+    });
+    const sql = `
+      UPDATE bookings
+         SET ${sets.join(', ')}
+       WHERE id = :id
+    `;
+    const [_, metadata] = await sequelize.query(sql, {
+      replacements,
+      type: QueryTypes.UPDATE,
+    });
+    if (metadata === 0) {
       throw new Error('Booking no encontrado');
     }
     return this.getBookingById(id);
   }
 
   async fetchAll(): Promise<BookingInterface[]> {
-    const [rows] = await mysqlConnection.execute('SELECT * FROM bookings');
-    return rows as BookingInterface[];
+    const sql = `SELECT * FROM bookings`;
+    const bookings = await sequelize.query<BookingInterface>(sql, {
+      type: QueryTypes.SELECT,
+    });
+    return bookings;
   }
 
-  async deleteBooking(id: number): Promise<{ affectedRows: number }> {
-    const [result] = await mysqlConnection.execute('DELETE FROM bookings WHERE id = ?', [id]);
-    const deleteResult = result as any;
-    return { affectedRows: deleteResult.affectedRows };
+  async deleteBooking(id: number) {
+    const [_, metadata] = await sequelize.query('DELETE FROM bookings WHERE id = ?', {
+      replacements: [id],
+    });
+    return (metadata as { affectedRows: number }).affectedRows;
   }
 
   async getBookingById(id: number): Promise<BookingInterface | null> {
-    const [rows] = await mysqlConnection.execute('SELECT * FROM bookings WHERE id = ?', [id]);
-    const bookings = rows as BookingInterface[];
+    const sql = `SELECT * FROM bookings WHERE id = :id`;
+    const bookings = await sequelize.query<BookingInterface>(sql, {
+      replacements: { id },
+      type: QueryTypes.SELECT,
+    });
     return bookings.length > 0 ? bookings[0] : null;
   }
 }

@@ -21,7 +21,7 @@ app.use(cors())
 
 app.use('/api/v1/auth', AuthController);
 app.use('/api/v1/users', authenticateToken, userRouter);
-app.use('/api/v1/booking', authenticateToken, bookingRouter);
+app.use('/api/v1/booking', bookingRouter);
 app.use('/api/v1/contact', authenticateToken, contactRouter);
 app.use('/api/v1/room', roomRouter);
 

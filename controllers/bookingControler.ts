@@ -56,7 +56,7 @@ bookingRouter.delete('/:id', async (req: Request, res: Response) => {
         const id = parseInt(req.params.id); 
         const result = await bookingService.deleteBooking(id);
         
-        if (result.affectedRows > 0) {
+        if (result > 0) {
             return res.status(204).send();
         } else {
             return res.status(404).json({ message: 'Booking not found' });
