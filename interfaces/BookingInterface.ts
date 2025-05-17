@@ -1,5 +1,5 @@
 export interface BookingInterface {
-    id?: number;
+    id: number;
     first_Name: string,
     last_Name: string,
     orderDate: string,

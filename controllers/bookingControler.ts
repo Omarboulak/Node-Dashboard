@@ -21,7 +21,7 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
         const allBookings = await bookingService.fetchAll();
         
         const validation = BookingValidator.validateBooking(newBookingData, allBookings);
-        if (validation !== true) {
+        if (validation.length > 0) {
             return res.status(400).json({ error: validation });
         }
         

@@ -1,7 +1,7 @@
 import { BookingInterface } from "../interfaces/BookingInterface";
 
 export class BookingValidator {
-    static validateBooking(booking: any, allBookig: BookingInterface[]): string[] | true{
+    static validateBooking(booking: any, allBookig: BookingInterface[]): string[]{
         const error: string[] = []
         const { first_Name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status } = booking;
         if (!first_Name) {

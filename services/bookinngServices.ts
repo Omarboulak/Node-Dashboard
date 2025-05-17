@@ -3,7 +3,8 @@ import { sequelize } from '../models/sequalize';
 import { BookingInterface } from '../interfaces/BookingInterface';
 
 export class BookingService {
-  async createBooking(booking: BookingInterface) {
+
+  async createBooking(booking: BookingInterface): Promise<BookingInterface> {
     const sql = `
       INSERT INTO bookings 
         (first_Name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status)
@@ -27,7 +28,8 @@ export class BookingService {
     return booking;
   }
 
-  async updateBooking(id: number, edit: Partial<BookingInterface>) {
+
+  async updateBooking(id: number, edit: Partial<BookingInterface>): Promise<BookingInterface | null> {
     const sets: string[] = [];
     const replacements: any = { id };
     Object.entries(edit).forEach(([key, val], idx) => {
@@ -39,7 +41,7 @@ export class BookingService {
          SET ${sets.join(', ')}
        WHERE id = :id
     `;
-    const [_, metadata] = await sequelize.query(sql, {
+    const [, metadata] = await sequelize.query(sql, {
       replacements,
       type: QueryTypes.UPDATE,
     });
@@ -57,12 +59,14 @@ export class BookingService {
     return bookings;
   }
 
-  async deleteBooking(id: number) {
-    const [_, metadata] = await sequelize.query('DELETE FROM bookings WHERE id = ?', {
+
+  async deleteBooking(id: number): Promise<number> {
+    const [, metadata] = await sequelize.query('DELETE FROM bookings WHERE id = ?', {
       replacements: [id],
     });
     return (metadata as { affectedRows: number }).affectedRows;
   }
+
 
   async getBookingById(id: number): Promise<BookingInterface | null> {
     const sql = `SELECT * FROM bookings WHERE id = :id`;
