@@ -4,6 +4,6 @@ export interface UsersInterface {
     Email: string,
     StartDate: string,
     JobDescription: string,
-    Contact: string, 
+    Contact: number, 
     Status: string
 }

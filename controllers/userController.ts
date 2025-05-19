@@ -22,7 +22,7 @@ userRouter.post('/', async (req, res) => {
 });
 
 userRouter.put('/:id', async (req, res) => {
-    const { id } = req.params;
+    const id = Number(req.params);
     const exists = await svc.getUserById(id);
     if (!exists) {
         return res.status(404).json({ error: 'User not found' })
@@ -32,9 +32,9 @@ userRouter.put('/:id', async (req, res) => {
 });
 
 userRouter.delete('/:id', async (req, res) => {
-    const { id } = req.params;
+    const id = Number(req.params);
     const result = await svc.deleteUser(id);
-    if (result.deletedCount > 0) {
+    if (result > 0) {
         return res.status(204).send();
     }
     res.status(404).json({ message: 'User not found' });
