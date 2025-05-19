@@ -35,7 +35,7 @@ contactRouter.post('/', async (req: Request, res: Response) => {
 
 contactRouter.put('/:id', async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
+        const id = Number(req.params.id);
         const updates = req.body as Partial<ContactInterface>;
         
         const existing = await contactService.getContactById(id);
@@ -53,10 +53,10 @@ contactRouter.put('/:id', async (req: Request, res: Response) => {
 
 contactRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
+        const id = Number(req.params.id);
         const result = await contactService.deleteContact(id);
         
-        if (result.deletedCount > 0) {
+        if (result > 0) {
             return res.status(204).send();
         } else {
             return res.status(404).json({ message: 'Contact not found' });
