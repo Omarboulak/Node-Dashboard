@@ -1,15 +1,10 @@
 import { RoomInterface } from "../interfaces/RoomInterface";
 
 export class RoomValidator {
-    static validateRoom(room: any, allUser: RoomInterface[]): RoomInterface | Boolean | string {
+    static validateRoom(room: any): string[] {
         const error: string[] = []
-        const { room_id, room_type, description, photos, price, cancellation_policy, amenities } = room;
-
-        if (!room_id) {
-            error.push('Tienes que introducir tu nombre completo')
-        } else if (allUser.some(roomId => roomId.room_id === room.room_id)) {
-            error.push('el id no puede estar duplicado')
-        } else if (room_type !== 'double superior' && room_type !== 'suite' && room_type !== 'single' && room_type !== 'double') {
+        const { room_type, description, photos, price, cancellation_policy, amenities } = room;
+        if (room_type !== 'Double Superior' && room_type !== 'suite' && room_type !== 'single' && room_type !== 'double') {
             error.push('tienes que poner una habitacion valida')
         } else if (!description) {
             error.push('tienes que introducir una descripcion')
@@ -25,6 +20,6 @@ export class RoomValidator {
             error.push('tienes que introducir las caracteristicas de la habitacion')
         }
 
-        return error.length === 0 ? true : room;
+        return error;
     }
 }

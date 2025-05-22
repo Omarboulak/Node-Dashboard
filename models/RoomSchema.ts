@@ -5,11 +5,6 @@ export interface RoomDocument extends RoomInterface, Document {}
 
 const Room = new Schema<RoomDocument>(
   {
-    room_id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     room_type: {
       type: String,
       required: [true, 'El tipo de habitación es obligatorio'],

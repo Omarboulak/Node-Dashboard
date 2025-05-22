@@ -21,7 +21,7 @@ bookingRouter.post('/', async (req: Request, res: Response) => {
         const allBookings = await bookingService.fetchAll();
         
         const validation = BookingValidator.validateBooking(newBookingData, allBookings);
-        if (validation !== true) {
+        if (validation.length > 0 ) {
             return res.status(400).json({ error: validation });
         }
         
@@ -56,7 +56,7 @@ bookingRouter.delete('/:id', async (req: Request, res: Response) => {
         const id = req.params.id;
         const result = await bookingService.deleteBooking(id);
         
-        if (result.deletedCount && result.deletedCount > 0) {
+        if (result.deletedCount > 0) {
             return res.status(204).send();
         } else {
             return res.status(404).json({ message: 'Booking not found' });

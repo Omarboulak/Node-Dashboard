@@ -1,7 +1,7 @@
 import { BookingInterface } from "../interfaces/BookingInterface";
 
 export class BookingValidator {
-    static validateBooking(booking: any, allBookig: BookingInterface[]): BookingInterface | Boolean | string {
+    static validateBooking(booking: any, allBookig: BookingInterface[]): string[] {
         const error: string[] = []
         const { first_Name, last_Name, orderDate, checkIn, checkOut, specialRequest, roomType, roomNumber, status } = booking;
         if (!first_Name) {
@@ -26,6 +26,6 @@ export class BookingValidator {
            error.push('tienes que introducir el numero de la habitacion')
         }
 
-       return error.length === 0 ? true : booking;
+       return error;
     }
 }
