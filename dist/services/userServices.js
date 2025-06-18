@@ -3,24 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const UserSchema_1 = require("../models/UserSchema");
 class UserService {
-    async createUser(user) {
-        const newUser = new UserSchema_1.UserSchema(user);
-        return await newUser.save();
-    }
-    async updateUser(id, edit) {
-        return await UserSchema_1.UserSchema.findOneAndUpdate({ ID: id }, edit, {
-            new: true,
-            runValidators: true,
-        });
+    async createUser(data) {
+        return await new UserSchema_1.UserSchema(data).save();
     }
     async fetchAll() {
         return await UserSchema_1.UserSchema.find();
     }
-    async deleteUser(id) {
-        return await UserSchema_1.UserSchema.deleteOne({ ID: id });
-    }
     async getUserById(id) {
-        return await UserSchema_1.UserSchema.findOne({ ID: id });
+        return await UserSchema_1.UserSchema.findById(id);
+    }
+    async updateUser(id, updates) {
+        return await UserSchema_1.UserSchema.findByIdAndUpdate(id, updates, {
+            new: true,
+            runValidators: true,
+        });
+    }
+    async deleteUser(id) {
+        const doc = await UserSchema_1.UserSchema.findByIdAndDelete(id);
+        return { deletedCount: doc ? 1 : 0 };
     }
 }
 exports.UserService = UserService;

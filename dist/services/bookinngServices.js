@@ -8,19 +8,17 @@ class BookingService {
         return await newBooking.save();
     }
     async updateBooking(id, edit) {
-        return await BookingSchema_1.BookingSchema.findOneAndUpdate({ ID: id }, edit, {
-            new: true,
-            runValidators: true
-        });
+        return await BookingSchema_1.BookingSchema.findByIdAndUpdate(id, edit, { new: true, runValidators: true });
     }
     async fetchAll() {
         return await BookingSchema_1.BookingSchema.find();
     }
     async deleteBooking(id) {
-        return await BookingSchema_1.BookingSchema.deleteOne({ ID: id });
+        const deleted = await BookingSchema_1.BookingSchema.findByIdAndDelete(id);
+        return { deletedCount: deleted ? 1 : 0 };
     }
     async getBookingById(id) {
-        return await BookingSchema_1.BookingSchema.findOne({ ID: id });
+        return await BookingSchema_1.BookingSchema.findById(id);
     }
 }
 exports.BookingService = BookingService;

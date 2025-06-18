@@ -3,24 +3,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoomService = void 0;
 const RoomSchema_1 = require("../models/RoomSchema");
 class RoomService {
-    async createRoom(room) {
-        const newRoom = new RoomSchema_1.RoomSchema(room);
+    async createRoom(booking) {
+        const newRoom = new RoomSchema_1.RoomSchema(booking);
         return await newRoom.save();
     }
     async updateRoom(id, edit) {
-        return await RoomSchema_1.RoomSchema.findOneAndUpdate({ room_id: id }, edit, {
-            new: true,
-            runValidators: true
-        });
+        return await RoomSchema_1.RoomSchema.findByIdAndUpdate(id, edit, { new: true, runValidators: true });
     }
     async fetchAll() {
         return await RoomSchema_1.RoomSchema.find();
     }
     async deleteRoom(id) {
-        return await RoomSchema_1.RoomSchema.deleteOne({ room_id: id });
+        const deleted = await RoomSchema_1.RoomSchema.findByIdAndDelete(id);
+        return { deletedCount: deleted ? 1 : 0 };
     }
     async getRoomById(id) {
-        return await RoomSchema_1.RoomSchema.findOne({ room_id: id });
+        return await RoomSchema_1.RoomSchema.findById(id);
     }
 }
 exports.RoomService = RoomService;

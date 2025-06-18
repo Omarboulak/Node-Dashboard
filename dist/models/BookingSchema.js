@@ -1,14 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingSchema = void 0;
-// src/models/BookingSchema.ts
 const mongoose_1 = require("mongoose");
 const Booking = new mongoose_1.Schema({
-    ID: {
-        type: Number,
-        required: true,
-        unique: true,
-    },
     first_Name: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
@@ -40,7 +34,7 @@ const Booking = new mongoose_1.Schema({
         type: String,
         required: [true, 'El tipo de habitación es obligatorio'],
         enum: {
-            values: ['Double', 'Deluxe', 'Suite', 'Single'],
+            values: ['Double Superior', 'Deluxe', 'Suite', 'Single'],
             message: 'No es un tipo de habitación válido',
         },
     },
@@ -53,11 +47,19 @@ const Booking = new mongoose_1.Schema({
         type: String,
         required: [true, 'El estado de la reserva es obligatorio'],
         enum: {
-            values: ['checkedIn', 'checkedOut', 'In Progress'],
+            values: ['checkIn', 'checkOut', 'In Progress'],
             message: 'no es un estado válido',
         },
     },
 }, {
     timestamps: true,
+});
+Booking.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: (_doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+    },
 });
 exports.BookingSchema = (0, mongoose_1.model)('Booking', Booking);

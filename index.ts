@@ -23,8 +23,6 @@ app.use('/api/v1/booking', authenticateToken, bookingRouter);
 app.use('/api/v1/contact', authenticateToken, contactRouter);
 app.use('/api/v1/room', roomRouter);
 
-// export const handler = () =>{
-//     connectDB().then(() =>{serverless(app)})
-// }
+// export const handler = serverless(app);
 
 app.listen(3001)

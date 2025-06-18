@@ -19,8 +19,8 @@ exports.roomRouter.post('/', async (req, res) => {
     try {
         const newRoomData = req.body;
         const allRooms = await roomService.fetchAll();
-        const validation = roomValidator_1.RoomValidator.validateRoom(newRoomData, allRooms);
-        if (validation !== true) {
+        const validation = roomValidator_1.RoomValidator.validateRoom(newRoomData);
+        if (validation.length > 0) {
             return res.status(400).json({ error: validation });
         }
         const newRoom = await roomService.createRoom(newRoomData);
@@ -32,7 +32,7 @@ exports.roomRouter.post('/', async (req, res) => {
 });
 exports.roomRouter.put('/:id', async (req, res) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const updates = req.body;
         const existing = await roomService.getRoomById(id);
         if (!existing) {
@@ -47,9 +47,9 @@ exports.roomRouter.put('/:id', async (req, res) => {
 });
 exports.roomRouter.delete('/:id', async (req, res) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const result = await roomService.deleteRoom(id);
-        if (result.deletedCount && result.deletedCount > 0) {
+        if (result.deletedCount > 0) {
             return res.status(204).send();
         }
         else {

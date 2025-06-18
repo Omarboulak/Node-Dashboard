@@ -43,4 +43,12 @@ const User = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
+User.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: (_doc, ret) => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+    },
+});
 exports.UserSchema = (0, mongoose_1.model)('User', User);

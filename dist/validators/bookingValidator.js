@@ -9,10 +9,7 @@ class BookingValidator {
             error.push('Tienes que introducir tu nombre completo');
         }
         else if (status !== 'checkIn' && status !== 'checkOut' && status !== 'In Progress') {
-            error.push('status solo puede ser ACTIVE o INACTIVE');
-        }
-        else if (allBookig.some(bookingId => bookingId.ID === booking.ID)) {
-            error.push('el id no puede estar duplicado');
+            error.push('status solo puede ser checkIn, checkOut, In Progress');
         }
         else if (!last_Name) {
             error.push('tienes que introducir el apellido');
@@ -38,7 +35,7 @@ class BookingValidator {
         else if (!roomNumber) {
             error.push('tienes que introducir el numero de la habitacion');
         }
-        return error.length === 0 ? true : booking;
+        return error;
     }
 }
 exports.BookingValidator = BookingValidator;

@@ -3,12 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
+const serverless_http_1 = __importDefault(require("serverless-http"));
 const userController_1 = require("./controllers/userController");
 const bookingControler_1 = require("./controllers/bookingControler");
 const authController_1 = require("./controllers/authController");
 const contactControllers_1 = require("./controllers/contactControllers");
+const roomController_1 = require("./controllers/roomController");
 const midleware_1 = require("./midleware/midleware");
 const connection_1 = __importDefault(require("./seed/connection"));
 const cors_1 = __importDefault(require("cors"));
@@ -21,7 +24,6 @@ app.use('/api/v1/auth', authController_1.AuthController);
 app.use('/api/v1/users', midleware_1.authenticateToken, userController_1.userRouter);
 app.use('/api/v1/booking', midleware_1.authenticateToken, bookingControler_1.bookingRouter);
 app.use('/api/v1/contact', midleware_1.authenticateToken, contactControllers_1.contactRouter);
-// export const handler = () =>{
-//     connectDB().then(() =>{serverless(app)})
-// }
-app.listen(3001);
+app.use('/api/v1/room', roomController_1.roomRouter);
+exports.handler = (0, serverless_http_1.default)(app);
+// app.listen(3001)

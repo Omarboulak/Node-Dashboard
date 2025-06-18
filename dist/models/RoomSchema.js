@@ -3,11 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoomSchema = void 0;
 const mongoose_1 = require("mongoose");
 const Room = new mongoose_1.Schema({
-    room_id: {
-        type: Number,
-        required: true,
-        unique: true,
-    },
     room_type: {
         type: String,
         required: [true, 'El tipo de habitación es obligatorio'],

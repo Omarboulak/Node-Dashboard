@@ -20,7 +20,7 @@ exports.bookingRouter.post('/', async (req, res) => {
         const newBookingData = req.body;
         const allBookings = await bookingService.fetchAll();
         const validation = bookingValidator_1.BookingValidator.validateBooking(newBookingData, allBookings);
-        if (validation !== true) {
+        if (validation.length > 0) {
             return res.status(400).json({ error: validation });
         }
         const newBooking = await bookingService.createBooking(newBookingData);
@@ -32,7 +32,7 @@ exports.bookingRouter.post('/', async (req, res) => {
 });
 exports.bookingRouter.put('/:id', async (req, res) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const updates = req.body;
         const existing = await bookingService.getBookingById(id);
         if (!existing) {
@@ -47,9 +47,9 @@ exports.bookingRouter.put('/:id', async (req, res) => {
 });
 exports.bookingRouter.delete('/:id', async (req, res) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.params.id;
         const result = await bookingService.deleteBooking(id);
-        if (result.deletedCount && result.deletedCount > 0) {
+        if (result.deletedCount > 0) {
             return res.status(204).send();
         }
         else {

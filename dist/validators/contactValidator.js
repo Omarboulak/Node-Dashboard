@@ -5,7 +5,7 @@ class ContactValidator {
     static validateContact(contact, allcontact) {
         const error = [];
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const { first_name, last_name, Status, ID, Date, email, phone, Subject, Comment, ARCHIVE } = contact;
+        const { first_name, last_name, Date, email, phone, Subject, Comment, ARCHIVE } = contact;
         if (!first_name) {
             error.push('Tienes que introducir tu nombre');
         }
