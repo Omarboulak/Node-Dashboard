@@ -1,13 +1,13 @@
-import dotenv from 'dotenv';
-import express from 'express'
 import serverless from 'serverless-http';
+import express from 'express'
+import connectDB from './seed/connection';
+import dotenv from 'dotenv';
 import { userRouter } from './controllers/userController';
 import { bookingRouter } from './controllers/bookingControler';
 import { AuthController } from './controllers/authController';
 import { contactRouter } from './controllers/contactControllers';
 import { roomRouter } from './controllers/roomController';
 import { authenticateToken } from './midleware/midleware';
-import connectDB from './seed/connection';
 import cors from 'cors';
 
 dotenv.config();

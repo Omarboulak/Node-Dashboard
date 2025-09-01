@@ -1,4 +1,3 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoomService = void 0;
 const RoomSchema_1 = require("../models/RoomSchema");
